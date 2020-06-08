@@ -4,20 +4,35 @@ const path = require('path')
 const got = require('got')
 const cheerio = require('cheerio')
 const {escape} = require('html-escaper')
+const { Notifier } = require('@airbrake/node')
 
 const feedXMLFilePath = path.join(__dirname, 'feed.xml')
 const feedJSONFilePath = path.join(__dirname, 'feed-items.json')
+const airbrake = new Notifier({
+  projectId: 276409,
+  projectKey: 'a37b857c1f537e53a76666654aecb721',
+  environment: 'production',
+})
 
-got('https://ramdajs.com/docs/')
-  .then(parseHTML)
-  .then(getRandomRamdaMethod)
-  .then(setLinksInHtmlToFullAddress)
-  .then(removeReplLinksInHtml)
-  .then(removeOldItemsInFeed)
-  .then(createNewFeedItem)
-  .then(updateJSONFeedItems)
-  .then(updateFeedXMLFile)
-  .catch(err => console.error(err))
+function updateFeed(){
+  getRamdaPage()
+    .then(parseHTML)
+    .then(getRandomRamdaMethod)
+    .then(setLinksInHtmlToFullAddress)
+    .then(removeReplLinksInHtml)
+    .then(removeOldItemsInFeed)
+    .then(createNewFeedItem)
+    .then(updateJSONFeedItems)
+    .then(updateFeedXMLFile)
+    .catch(err => {
+      console.error(err)
+      airbrake.notify(err)
+    })
+}
+
+function getRamdaPage(){
+  return got('https://ramdajs.com/docs/')
+}
 
 function parseHTML({body}){
   return cheerio.load(body)
@@ -117,3 +132,6 @@ function updateFeedXMLFile([,feedItems]){
   return fs.promises.writeFile(feedXMLFilePath, generateFeedXML(feedItems))
 }
 
+module.exports = {
+  updateFeed
+}

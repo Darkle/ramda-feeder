@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Darkle/ramda-feeder#readme",
   "dependencies": {
+    "@airbrake/node": "^1.2.0",
     "cheerio": "^1.0.0-rc.3",
     "express": "^4.17.1",
     "got": "^11.3.0",
