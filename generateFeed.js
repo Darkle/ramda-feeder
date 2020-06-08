@@ -3,17 +3,20 @@ const path = require('path')
 
 const got = require('got')
 const cheerio = require('cheerio')
+const {escape} = require('html-escaper')
 
-const feedFilePath = path.join(__dirname, 'feed.xml')
+const feedXMLFilePath = path.join(__dirname, 'feed.xml')
+const feedJSONFilePath = path.join(__dirname, 'feed-items.json')
 
 got('https://ramdajs.com/docs/')
   .then(parseHTML)
-  .then(getRandomRamdaMethodFromPage)
+  .then(getRandomRamdaMethod)
   .then(setLinksInHtmlToFullAddress)
+  .then(removeReplLinksInHtml)
   .then(removeOldItemsInFeed)
   .then(createNewFeedItem)
-  // .then(updateFeed)
-  .then(saveUpdatedFeedToDisk)
+  .then(updateJSONFeedItems)
+  .then(updateFeedXMLFile)
   .catch(err => console.error(err))
 
 function parseHTML({body}){
@@ -26,57 +29,92 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-function getRandomRamdaMethodFromPage($ramdapage){
-  const cards = $ramdapage('main .card')
+function getRandomRamdaMethod($){
+  const cards = $('main .card')
   const randomNumberInRange = getRandomInt(1, cards.length)
-  const card = $ramdapage('main .card').get(randomNumberInRange)
-  return [$ramdapage, card]
+  const card = $.html($('main .card').get(randomNumberInRange))
+  return card
 }
 
-function setLinksInHtmlToFullAddress([$ramdapage, card]){
-  const cardWithFullLinks = $ramdapage(card).find('a[href^="#"]').each(function() {
-    $ramdapage(this).attr('href', 'https://ramdajs.com/docs/' + $ramdapage(this).attr('href'))
+function setLinksInHtmlToFullAddress(card){
+  const $ = cheerio.load(card)
+  $('a[href^="#"]').each(function() {
+    $(this).attr('href', 'https://ramdajs.com/docs/' + $(this).attr('href'))
   })
-  return [$ramdapage, cardWithFullLinks]
+  const modifiedCard = $.html()
+  return modifiedCard
 }
 
-function removeOldItemsInFeed([$ramdapage, card]){
-  return fs.promises.readFile(feedFilePath)
-    .then(fileData => {
-      const $feedxml = cheerio.load(fileData)
-      const feedItems = $feedxml('item')
+function removeReplLinksInHtml(card){
+  const $ = cheerio.load(card)
+  $('.try-repl').remove()
+  const modifiedCard = $.html()
+  return modifiedCard
+}
+
+function removeOldItemsInFeed(card){
+  return fs.promises.readFile(feedJSONFilePath)
+    .then(JSON.parse)
+    .then(({feedItems}) => {
       if(feedItems.length > 6){
-        $feedxml($feedxml('item').get(7)).remove()
+        feedItems.pop()
       }
-      return [$ramdapage, card, $feedxml]
+      return [card, feedItems]
     })
 }
 
-function createNewFeedItem([$ramdapage, card, $feedxml]){
-  console.log($ramdapage.html($ramdapage(card).find('h2')))
-  return [`
-    <item>
-      <title>
-          Ramda: ${$ramdapage.html($ramdapage(card).find('h2'))}
-      </title>
-      <description>
-          <![CDATA[use this for the content. It can include html.]]>
-      </description>
-      <link>${$ramdapage(card).attr('href')}</link>
-      <guid isPermaLink="true">${$ramdapage(card).attr('href')}</guid>
-      <pubDate>${new Date().toUTCString()}</pubDate>
-    </item>
-    `,
-    $feedxml
-    ]
+function createNewFeedItem([card, feedItems]){
+  const $ = cheerio.load(card)
+  return [
+    {
+      "title": `Ramda: ${$.text($('h2 a')).trim()}`,
+      "description": escape($.html($(card))),
+      "link": $('h2 a').attr('href'),
+      "guid": $('h2 a').attr('href'),
+      "pubDate": (new Date().toUTCString())
+    },
+    feedItems
+  ]
 }
 
-function updateFeed([newFeedItem, $feedxml]){
-  $feedxml('channel').prepend(newFeedItem)
-  return $feedxml
+function updateJSONFeedItems([newFeedItem, feedItems]){
+  feedItems.unshift(newFeedItem)
+  return Promise.all([
+    fs.promises.writeFile(feedJSONFilePath, JSON.stringify({feedItems})),
+    Promise.resolve(feedItems)
+  ])
 }
 
-function saveUpdatedFeedToDisk([,$feedxml]){
-  return fs.promises.writeFile(feedFilePath, $feedxml.xml())
+const generateFeedXML = (feedItems) =>  `<?xml version="1.0" encoding="UTF-8"?>
+  <rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Ramda Feed</title>
+      <description>Get a new Ramda method in your RSS feed each day.</description>
+      <link>https://ramda-feed.openode.io/</link>
+      <lastBuildDate>Mon, 08 Jun 2020 03:23:41 GMT</lastBuildDate>
+      <atom:link href="https://ramda-feed.openode.io/feed" rel="self" type="application/rss+xml" />
+      ${
+        feedItems.reduce((acc, feedItem) => {
+          return `${acc}
+          <item>
+            <title>
+                <![CDATA[Ramda: ${feedItem.title}]]>
+            </title>
+            <description>
+                <![CDATA[${feedItem.description}]]>
+            </description>
+            <link>${feedItem.link}</link>
+            <guid isPermaLink="true">${feedItem.guid}</guid>
+            <pubDate>${feedItem.pubDate}</pubDate>
+          </item>
+          `
+        }, '')
+      }
+    </channel>
+  </rss>
+`
+
+function updateFeedXMLFile([,feedItems]){
+  return fs.promises.writeFile(feedXMLFilePath, generateFeedXML(feedItems))
 }
 
