@@ -1,7 +1,19 @@
+const path = require('path')
+
 const express = require('express')
 const app = express()
 const port = 80
 
-app.get('/', (req, res) => res.send('Hello World!'))
+const feedXMLFilePath = path.join(__dirname, 'feed.xml')
+const indexHTMLFilePath = path.join(__dirname, 'index.html')
 
-app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
+app.use(express.static('assets'))
+
+app.get('/', (req, res) => res.sendFile(indexHTMLFilePath))
+
+app.get('/feed', (req, res) => {
+  res.set('Content-Type', 'application/rss+xml')
+  res.sendFile(feedXMLFilePath)
+})
+
+app.listen(port, () => console.log(`Server has started`))
