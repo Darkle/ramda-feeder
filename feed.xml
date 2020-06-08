@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+<!--?xml version="1.0" encoding="UTF-8"?--><html><head></head><body><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
   <channel>
     <title>Ramda Feed</title>
     <description>Get a new Ramda method in your RSS feed each day.</description>
-    <link>https://ramda-feed.openode.io/</link>
-    <lastBuildDate>Mon, 08 Jun 2020 03:23:41 GMT</lastBuildDate>
-    <atom:link href="https://ramda-feed.openode.io/feed" rel="self" type="application/rss+xml" />
+    <link>https://ramda-feed.openode.io/
+    <lastbuilddate>Mon, 08 Jun 2020 03:23:41 GMT</lastbuilddate>
+    <atom:link href="https://ramda-feed.openode.io/feed" rel="self" type="application/rss+xml">
     <icon>https://www.redditstatic.com/icon.png/</icon>
 
-  </channel>
-</rss>
+  </atom:link></channel>
+</rss></body></html>

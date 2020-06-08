@@ -11,6 +11,9 @@ got('https://ramdajs.com/docs/')
   .then(getRandomRamdaMethodFromPage)
   .then(setLinksInHtmlToFullAddress)
   .then(removeOldItemsInFeed)
+  .then(createNewFeedItem)
+  // .then(updateFeed)
+  .then(saveUpdatedFeedToDisk)
   .catch(err => console.error(err))
 
 function parseHTML({body}){
@@ -43,17 +46,18 @@ function removeOldItemsInFeed([$ramdapage, card]){
       const $feedxml = cheerio.load(fileData)
       const feedItems = $feedxml('item')
       if(feedItems.length > 6){
-        $feedxml('item').get(6).remove()
+        $feedxml($feedxml('item').get(7)).remove()
       }
       return [$ramdapage, card, $feedxml]
     })
 }
 
-function createNewFeedItem([$ramdapage, card]){
-  return `
+function createNewFeedItem([$ramdapage, card, $feedxml]){
+  console.log($ramdapage.html($ramdapage(card).find('h2')))
+  return [`
     <item>
       <title>
-          <![CDATA[Ramda: ${$ramdapage(card).find('h2').text()}]]>
+          Ramda: ${$ramdapage.html($ramdapage(card).find('h2'))}
       </title>
       <description>
           <![CDATA[use this for the content. It can include html.]]>
@@ -62,12 +66,17 @@ function createNewFeedItem([$ramdapage, card]){
       <guid isPermaLink="true">${$ramdapage(card).attr('href')}</guid>
       <pubDate>${new Date().toUTCString()}</pubDate>
     </item>
-    `
+    `,
+    $feedxml
+    ]
 }
 
-function addNewItemToFeed([card, $feedxml]){
-  const newFeedItem = createNewFeedItem(card)
-  $feedxml('channel').append(newFeedItem)
-  return fs.promises.writeFile($feedxml, $feedxml)
+function updateFeed([newFeedItem, $feedxml]){
+  $feedxml('channel').prepend(newFeedItem)
+  return $feedxml
+}
+
+function saveUpdatedFeedToDisk([,$feedxml]){
+  return fs.promises.writeFile(feedFilePath, $feedxml.xml())
 }
 
