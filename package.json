@@ -1,0 +1,24 @@
+{
+  "name": "ramda-feeder",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Darkle/ramda-feeder.git"
+  },
+  "author": "",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Darkle/ramda-feeder/issues"
+  },
+  "homepage": "https://github.com/Darkle/ramda-feeder#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "got": "^11.3.0",
+    "rss": "^1.2.2"
+  }
+}
