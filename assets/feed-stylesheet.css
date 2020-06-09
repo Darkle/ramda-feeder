@@ -1,0 +1,41 @@
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #000;
+  background-color: #eee;
+  border-radius: 4px;
+}
+code, kbd, pre, samp {
+  font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+}
+.hljs-comment {
+    color: #de6
+}
+
+.hljs-keyword {
+    color: #fff;
+    font-weight: 700
+}
+
+.hljs-number,
+.hljs-regexp,
+.hljs-string {
+    color: #fc9
+}
+
+.hljs,
+pre {
+    background: #333;
+    color: #ccc
+}
+
+details{
+  margin-top: 0.6em;
+}
+
+.card>pre{
+  margin-top: 1.4em;
+  padding: 1.4em;
+  margin-bottom: 2em;
+  line-height: 2em;
+}

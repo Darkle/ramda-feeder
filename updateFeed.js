@@ -21,6 +21,7 @@ function updateFeed(){
     .then(getRandomRamdaMethod)
     .then(setLinksInHtmlToFullAddress)
     .then(removeReplLinksInHtml)
+    .then(convertHtmlExpandLinkToDetailsElement)
     .then(removeOldItemsInFeed)
     .then(createNewFeedItem)
     .then(updateJSONFeedItems)
@@ -68,6 +69,17 @@ function removeReplLinksInHtml(card){
   return modifiedCard
 }
 
+function convertHtmlExpandLinkToDetailsElement(card){
+  const $ = cheerio.load(card)
+  const expandLink = $('a[href$="#expand"]')
+  if(!expandLink.get(0)) return card
+  const expandLinkText = `Expand ${$.text(expandLink)}`
+  const expandDetails = $.html(expandLink.siblings())
+  expandLink.parent().replaceWith(`<details><summary>${expandLinkText}</summary>${expandDetails}</details>`)
+  const modifiedCard = $.html()
+  return modifiedCard
+}
+
 function removeOldItemsInFeed(card){
   return fs.promises.readFile(feedJSONFilePath)
     .then(JSON.parse)
@@ -102,6 +114,7 @@ function updateJSONFeedItems([newFeedItem, feedItems]){
 }
 
 const generateFeedXML = (feedItems) => `<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="https://ramda-feeder.openode.io/feed-stylesheet.css" ?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <updated>${(new Date()).toISOString()}</updated>
     <icon>https://ramda-feeder.openode.io/favicon.ico</icon>
