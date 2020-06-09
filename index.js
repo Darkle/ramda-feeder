@@ -23,3 +23,6 @@ app.get('/feed', (req, res) => {
 app.listen(port, () => console.log(`Server has started`))
 
 cronJob.start()
+
+process.on('unhandledRejection', err => console.error(err))
+process.on('uncaughtException', err => console.error(err))

@@ -15,6 +15,7 @@ const airbrake = new Notifier({
 })
 
 function updateFeed(){
+  console.log(`Running updateFeed at ${new Date().toUTCString()}`)
   getRamdaPage()
     .then(parseHTML)
     .then(getRandomRamdaMethod)
@@ -83,10 +84,10 @@ function createNewFeedItem([card, feedItems]){
   return [
     {
       "title": `Ramda: ${$.text($('h2 a')).trim()}`,
-      "description": escape($.html($(card))),
+      "content": escape($.html($(card))),
       "link": $('h2 a').attr('href'),
       "guid": $('h2 a').attr('href'),
-      "pubDate": (new Date().toUTCString())
+      "pubDate": ((new Date()).toISOString())
     },
     feedItems
   ]
@@ -101,31 +102,30 @@ function updateJSONFeedItems([newFeedItem, feedItems]){
 }
 
 const generateFeedXML = (feedItems) => `<?xml version="1.0" encoding="UTF-8"?>
-  <rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-      <title>Ramda Feed</title>
-      <description>Get a new Ramda api method in your RSS feed each day.</description>
-      <link>https://ramda-feed.openode.io/</link>
-      <lastBuildDate>Mon, 08 Jun 2020 03:23:41 GMT</lastBuildDate>
-      <atom:link href="https://ramda-feed.openode.io/feed" rel="self" type="application/rss+xml" />
-      ${
-        feedItems.reduce((acc, feedItem) => `${acc}
-          <item>
-            <title>
-                <![CDATA[Ramda: ${feedItem.title}]]>
-            </title>
-            <description>
-                <![CDATA[${feedItem.description}]]>
-            </description>
-            <link>${feedItem.link}</link>
-            <guid isPermaLink="true">${feedItem.guid}</guid>
-            <pubDate>${feedItem.pubDate}</pubDate>
-          </item>
-          `
-        , '')
-      }
-    </channel>
-  </rss>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <updated>${(new Date()).toISOString()}</updated>
+    <icon>https://ramda-feeder.openode.io/favicon.ico</icon>
+    <id>https://ramdajs.com/docs/</id>
+    <link rel="self" href="https://ramda-feeder.openode.io/feed" type="application/atom+xml" />
+    <subtitle>Get a new Ramda api method in your RSS feed each day.</subtitle>
+    <title>Ramda Daily Feed</title>
+    ${
+      feedItems.reduce((acc, feedItem) => `${acc}
+        <entry>
+            <author>
+                <name>${feedItem.link}</name>
+                <uri>${feedItem.link}</uri>
+            </author>
+            <content type="html">${feedItem.content}</content>
+            <id>${feedItem.guid}</id>
+            <link href="${feedItem.link}" />
+            <updated>${feedItem.pubDate}</updated>
+            <title>Ramda: ${feedItem.title}</title>
+        </entry>
+        `
+      , '')
+    }
+</feed>
 `
 
 function updateFeedXMLFile([,feedItems]){
