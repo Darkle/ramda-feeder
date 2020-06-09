@@ -17,6 +17,19 @@
     pre{
       background-color: aliceblue;
       padding: 1em;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .githubIcon{
+      text-align: center;
+      margin-top: 8em;
+    }
+    .githubIcon a{
+      padding: 10px;
+      opacity: 0.4;
+    }
+    .githubIcon a:hover{
+      opacity: 1;
     }
   </style>
 </head>
@@ -25,6 +38,11 @@
     <h3>Ramda Daily Feed</h3>
     <pre>https://ramda-feeder.openode.io/feed</pre>
     <p>This is an RSS feed that will show a new random <a href="https://ramdajs.com/docs/">Ramda.js api method</a> every day in your feed reader to help you learn the Ramda.js api 🎓👌.</p>
+    <p class="githubIcon" >
+      <a href="https://github.com/Darkle/ramda-feeder">
+        <img src="githubicon.png" alt="github icon" />
+      </a>
+    </p>
   </main>
 </body>
 </html>
