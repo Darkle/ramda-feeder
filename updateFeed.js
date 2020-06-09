@@ -21,6 +21,7 @@ function updateFeed(){
     .then(getRandomRamdaMethod)
     .then(setLinksInHtmlToFullAddress)
     .then(removeReplLinksInHtml)
+    .then(removeSourceLinksInHtml)
     .then(convertHtmlExpandLinkToDetailsElement)
     .then(removeOldItemsInFeed)
     .then(createNewFeedItem)
@@ -65,6 +66,13 @@ function setLinksInHtmlToFullAddress(card){
 function removeReplLinksInHtml(card){
   const $ = cheerio.load(card)
   $('.try-repl').remove()
+  const modifiedCard = $.html()
+  return modifiedCard
+}
+
+function removeSourceLinksInHtml(card){
+  const $ = cheerio.load(card)
+  $('.pull-right').remove()
   const modifiedCard = $.html()
   return modifiedCard
 }
