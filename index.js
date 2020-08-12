@@ -9,7 +9,7 @@ const app = express()
 const port = 80
 const feedXMLFilePath = path.join(__dirname, 'feed.xml')
 const indexHTMLFilePath = path.join(__dirname, 'index.html')
-const cronJob = new CronJob('0 0 5 * * *', updateFeed)
+const cronJob = new CronJob('0 0 13 * * *', updateFeed)
 
 app.use(express.static('assets'))
 
