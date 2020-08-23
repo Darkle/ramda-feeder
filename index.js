@@ -13,9 +13,9 @@ const cronJob = new CronJob('0 0 13 * * *', updateFeed)
 
 app.use(express.static('assets'))
 
-app.get('/', (req, res) => res.sendFile(indexHTMLFilePath))
+app.get('/', (_, res) => res.sendFile(indexHTMLFilePath))
 
-app.get('/feed', (req, res) => {
+app.get('/feed', (_, res) => {
   res.set('Content-Type', 'application/rss+xml')
   res.sendFile(feedXMLFilePath)
 })
@@ -23,6 +23,8 @@ app.get('/feed', (req, res) => {
 app.listen(port, () => console.log(`Server has started`))
 
 cronJob.start()
+
+updateFeed()
 
 process.on('unhandledRejection', err => console.error(err))
 process.on('uncaughtException', err => console.error(err))
