@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="https://ramda-feeder.openode.io/feed-stylesheet.css" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <updated>2021-07-18T23:16:01.241Z</updated>
+    <icon>https://ramda-feeder.openode.io/favicon.ico</icon>
+    <id>https://ramdajs.com/docs/</id>
+    <link rel="self" href="https://ramda-feeder.openode.io/feed" type="application/atom+xml" />
+    <subtitle>Get a new Ramda api method in your RSS feed each day.</subtitle>
+    <title>Ramda Daily Feed</title>
+    
+        <entry>
+            <author>
+                <name>https://ramdajs.com/docs/#modulo</name>
+                <uri>https://ramdajs.com/docs/#modulo</uri>
+            </author>
+            <content type="html">&lt;section class=&quot;card&quot;&gt;
+            &lt;h2&gt;
+                &lt;a tabindex=&quot;2&quot; class=&quot;name&quot; href=&quot;https://ramdajs.com/docs/#modulo&quot;&gt;modulo&lt;/a&gt;
+                
+            &lt;/h2&gt;
+
+
+            &lt;div&gt;&lt;code&gt;Number &amp;#x2192; Number &amp;#x2192; Number&lt;/code&gt;&lt;/div&gt;
+
+
+            &lt;details&gt;&lt;summary&gt;Expand Parameters&lt;/summary&gt;&lt;div class=&quot;details panel panel-default&quot;&gt;
+                    &lt;ul class=&quot;list-group&quot;&gt;
+                        &lt;li class=&quot;list-group-item&quot;&gt;
+                            &lt;span class=&quot;type&quot;&gt;
+                            &lt;/span&gt;
+                            &lt;span class=&quot;name&quot;&gt;a&lt;/span&gt;
+                            &lt;span class=&quot;description&quot;&gt;&lt;p&gt;The value to the divide.&lt;/p&gt;
+&lt;/span&gt;
+                        &lt;/li&gt;
+                        &lt;li class=&quot;list-group-item&quot;&gt;
+                            &lt;span class=&quot;type&quot;&gt;
+                            &lt;/span&gt;
+                            &lt;span class=&quot;name&quot;&gt;b&lt;/span&gt;
+                            &lt;span class=&quot;description&quot;&gt;&lt;p&gt;The pseudo-modulus&lt;/p&gt;
+&lt;/span&gt;
+                        &lt;/li&gt;
+                    &lt;/ul&gt;
+                    &lt;div class=&quot;panel-body&quot;&gt;
+                        &lt;span class=&quot;returns&quot;&gt;Returns&lt;/span&gt;
+                        &lt;span class=&quot;type&quot;&gt;Number&lt;/span&gt;
+                        &lt;span class=&quot;description&quot;&gt;The result of `b % a`.&lt;/span&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;&lt;/details&gt;
+
+            &lt;p&gt;&lt;small&gt;Added in v0.1.1&lt;/small&gt;&lt;/p&gt;
+
+            &lt;div class=&quot;description&quot;&gt;&lt;p&gt;Divides the first parameter by the second and returns the remainder. Note
+that this function preserves the JavaScript-style behavior for modulo. For
+mathematical modulo see &lt;a href=&quot;https://ramdajs.com/docs/#mathMod&quot;&gt;&lt;code&gt;mathMod&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+
+
+
+            &lt;div class=&quot;see&quot;&gt;
+                See also
+                &lt;a href=&quot;https://ramdajs.com/docs/#mathMod&quot;&gt;mathMod&lt;/a&gt;.
+            &lt;/div&gt;
+
+	    &lt;pre&gt;&lt;code class=&quot;hljs javascript&quot;&gt;R.modulo(&lt;span class=&quot;hljs-number&quot;&gt;17&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;3&lt;/span&gt;); &lt;span class=&quot;hljs-comment&quot;&gt;//=&amp;gt; 2&lt;/span&gt;
+&lt;span class=&quot;hljs-comment&quot;&gt;// JS behavior:&lt;/span&gt;
+R.modulo(&lt;span class=&quot;hljs-number&quot;&gt;-17&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;3&lt;/span&gt;); &lt;span class=&quot;hljs-comment&quot;&gt;//=&amp;gt; -2&lt;/span&gt;
+R.modulo(&lt;span class=&quot;hljs-number&quot;&gt;17&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;-3&lt;/span&gt;); &lt;span class=&quot;hljs-comment&quot;&gt;//=&amp;gt; 2&lt;/span&gt;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;const&lt;/span&gt; isOdd = R.modulo(R.__, &lt;span class=&quot;hljs-number&quot;&gt;2&lt;/span&gt;);
+isOdd(&lt;span class=&quot;hljs-number&quot;&gt;42&lt;/span&gt;); &lt;span class=&quot;hljs-comment&quot;&gt;//=&amp;gt; 0&lt;/span&gt;
+isOdd(&lt;span class=&quot;hljs-number&quot;&gt;21&lt;/span&gt;); &lt;span class=&quot;hljs-comment&quot;&gt;//=&amp;gt; 1&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+        &lt;/section&gt;</content>
+            <id>https://ramdajs.com/docs/#modulo</id>
+            <link href="https://ramdajs.com/docs/#modulo" />
+            <updated>2021-07-18T23:16:01.238Z</updated>
+            <title>Ramda: modulo</title>
+        </entry>
+        
+</feed>

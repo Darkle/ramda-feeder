@@ -1,9 +1,9 @@
 const path = require('path')
 
 const express = require('express')
-const {CronJob} = require('cron')
+const { CronJob } = require('cron')
 
-const {updateFeed} = require('./updateFeed.js')
+const { updateFeed } = require('./updateFeed.js')
 
 const app = express()
 const port = 80
